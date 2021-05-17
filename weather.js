@@ -1,5 +1,16 @@
-
 const COORDS="coords";
+const weather=document.querySelector(".js-weather");
+
+function getWeather(lat, lon){
+    fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+    ).then(function(response){
+        return response.json();
+    }).then(function(json){
+        const temperature = json.main.temp;
+        const place= json.name;
+        weather.innerText=`${temperature} @ ${place}`;
+    })
+}
 
 function saveCoords(coordsObj){     // 위도 경도 , storage에 저장하기
     localStorage.setItem(COORDS,JSON.stringify(coordsObj));
@@ -13,6 +24,7 @@ function handleGeoSuccess(position){    // 위도, 경도 좌표를 가져오는
         longitude
     };
     saveCoords(coordObj);
+    getWeather(latitude,longitude);
 }
 
 function handleGeoError(){
@@ -24,11 +36,12 @@ function askForCoords(){
 }
 
 function loadCoords(){
-    const loadedCords=localStorage.getItem(COORDS);
-    if(loadedCords === null){
+    const loadedCoords=localStorage.getItem(COORDS);
+    if(loadedCoords === null){
         askForCoords();
     }else{
-
+        const parsedCoords=JSON.parse(loadedCoords);
+        getWeather(parsedCoords.latitude,parsedCoords.longitude);
     }
 }
 function init(){
