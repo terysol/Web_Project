@@ -27,6 +27,7 @@ function paintToDo(text){   // toDo를 화면에 보여주기
     const newId=toDos.length+1;
 
     delBtn.innerText = "❌";
+    delBtn.className="delete";
     delBtn.addEventListener("click",deleteTodo);
     span.innerText = text;
     li.appendChild(span);        // father 요소를 넣는다.
